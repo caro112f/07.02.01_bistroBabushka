@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bistro Babushka</title>
+    <style>
+      body {
+        background-color: darkred;
+      }
+      section {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 10px;
+      }
+      article {
+        border-radius: 10%;
+        box-shadow: 5px 5px 5px black;
+        padding: 10px;
+        background-color: gainsboro;
+      }
+
+      img {
+        max-width: 30%;
+      }
+      nav {
+        display: flex;
+        place-content: center;
+        gap: 10px;
+      }
+      header {
+        margin-bottom: 3em;
+      }
+      h1 {
+        color: white;
+        font-size: 4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Bistro Babushka</h1>
+      <nav>
+        <button>Alle</button>
+        <button>Forretter</button>
+        <button>Hovedretter</button>
+        <button>Dessert</button>
+        <button>Drikkevarer</button>
+      </nav>
+    </header>
+    <section class="container"></section>
+    <template>
+      <article>
+        <img class="billede" src="" alt="" />
+        <h2 class="navn"></h2>
+        <p class="kortbeskrivelse"></p>
+        <p class="pris"></p>
+      </article>
+    </template>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", start);
+      function start() {
+        const url = "https://babushka-dd8a.restdb.io/rest/menu";
+        hentData(url);
+      }
+
+      const container = document.querySelector(".container");
+      const temp = document.querySelector("template");
+
+      const options = {
+        headers: {
+          "x-apikey": "600ec2fb1346a1524ff12de4",
+        },
+      };
+      async function hentData(url) {
+        const respons = await fetch(url, options);
+        const json = await respons.json();
+        console.log(json);
+        vis(json);
+      }
+      function vis(retter) {
+        retter.forEach((ret) => {
+          let klon = temp.cloneNode(true).content;
+          klon.querySelector(".billede").src =
+            "medium/" + ret.billede + "-md.jph";
+          klon.querySelector(".navn").textContent = ret.navn;
+          klon.querySelector(".kortbeskrivelse").textContent =
+            ret.kortbeskrivelse;
+          klon.querySelector(".pris").textContent = ret.pris;
+          container.appendChild(klon);
+        });
+      }
+      hentData(url);
+    </script>
+  </body>
+</html>
