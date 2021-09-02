@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bistro Babushka</title>
+
+    <style>
+      body {
+        margin: 0;
+        background-color: rgb(94, 39, 39);
+      }
+      header {
+        padding: 20px;
+        background-image: url("background/artiom-vallat-oVKbZx72I1U-unsplash.jpg");
+        background-position: 20% 40%;
+        height: 25vh;
+        box-shadow: 4px 4px 8px black;
+      }
+      h1 {
+        color: white;
+        font-size: 3em;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+      }
+      nav {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      button {
+        gap: 10px;
+        margin: 10px;
+        padding: 10px;
+        place-content: center;
+        border-radius: 20px;
+        cursor: pointer;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        font-weight: 600;
+      }
+      main {
+        display: flex;
+        place-content: center;
+      }
+
+      article {
+        border-radius: 20px;
+        padding: 10px;
+        background-color: gainsboro;
+        margin: 20px;
+      }
+
+      #popup {
+        position: fixed;
+        background-color: rgb(94, 39, 39);
+        border-radius: 20px;
+        width: 100%;
+        height: 100vh;
+        top: 0;
+        overflow: scroll;
+        padding: 10px;
+      }
+      @media (min-width: 600px) {
+        section {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+          max-width: 800px;
+        }
+      }
+      @media (min-width: 900px) {
+        section {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 10px;
+          max-width: 1200px;
+        }
+      }
+      #article_popup {
+        display: grid;
+        grid-template-columns: repeat(auto, minmax(300px, 1000px));
+        max-width: 80vw;
+        height: auto;
+        margin: 4rem;
+        padding: 12px;
+        border-radius: 25px;
+        background-color: gainsboro;
+      }
+      img {
+        max-width: 60%;
+      }
+
+      nav {
+        display: flex;
+        place-content: center;
+      }
+
+      button:hover {
+        background-color: rgb(194, 129, 132);
+      }
+      #luk {
+        /* position: fixed; */
+        /* padding: 1em; */
+        font-size: 1.7em;
+        font-weight: bolder;
+        color: white;
+        cursor: pointer;
+      }
+      .hide {
+        display: none;
+      }
+      .beskrivelse {
+        padding: 10px;
+        grid-column: 2;
+        max-width: 70%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Bistro Babushka</h1>
+    </header>
+
+    <nav>
+      <button data-kategori="alle" class="valgte">Alle</button>
+      <button data-kategori="forretter">Forretter</button>
+      <button data-kategori="hovedretter">Hovedretter</button>
+      <button data-kategori="desserter">Desserter</button>
+      <button data-kategori="drikkevarer">Drikkevarer</button>
+      <button data-kategori="sideorders">Sideorders</button>
+    </nav>
+    <main>
+      <section id="liste"></section>
+
+      <template>
+        <article class="ret">
+          <img src="" alt="" class="billede" />
+          <h2 class="navn"></h2>
+          <p class="kortbeskrivelse"></p>
+          <p class="pris"></p>
+        </article>
+      </template>
+
+      <section id="popup" class="hide">
+        <div id="luk"><button>Luk</button></div>
+        <article id="article_popup">
+          <img src="" alt="" />
+          <section class="beskrivelse">
+            <h2>Navn: <span class="navn"></span></h2>
+            <p>Beskrivelse: <span class="langbeskrivelse"></span></p>
+            <button class="seMere">Se mere</button>
+          </section>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      //   const header = document.querySelector("header h2");
+      //   const medieurl = "https://persongalleri-5d3e.restdb.io/media/";
+      const myHeaders = {
+        "x-apikey": "600ec2fb1346a1524ff12de4",
+      };
+
+      const md = "-md.jpg";
+
+      document.addEventListener("DOMContentLoaded", start);
+      let retter;
+      let filter = "alle";
+
+      // første funktion der kaldes efter DOM er loaded
+      function start() {
+        const filterKnapper = document.querySelectorAll("nav button");
+        filterKnapper.forEach((knap) =>
+          knap.addEventListener("click", filtrerRetter)
+        );
+        loadJSON();
+      }
+
+      function filtrerRetter() {
+        filter = this.dataset.kategori;
+        visRetter();
+        header.textContent = this.textContent;
+        //console.log(this);
+      }
+
+      async function loadJSON() {
+        const JSONData = await fetch(
+          "https://babushka-dd8a.restdb.io/rest/menu",
+          {
+            headers: myHeaders,
+          }
+        );
+        retter = await JSONData.json();
+        console.log("Retter", retter);
+        visRetter();
+      }
+
+      //funktion der viser personer i liste view
+      function visRetter() {
+        const dest = document.querySelector("#liste"); // container til articles med en person
+        const skabelon = document.querySelector("template").content; // select indhold af html skabelon (article)
+        dest.textContent = "";
+        retter.forEach((ret) => {
+          console.log("Type ret", ret.kategori);
+          // loop igennem json (personer)
+          if (filter == ret.kategori || filter == "alle") {
+            const klon = skabelon.cloneNode(true);
+            klon.querySelector(".billede").src =
+              "medium/" + ret.billednavn + md;
+            klon.querySelector(".navn").textContent = ret.navn;
+            klon.querySelector(".kortbeskrivelse").textContent =
+              ret.kortbeskrivelse;
+            klon.querySelector(".pris").textContent = ret.pris + "kr.";
+            klon
+              .querySelector("article")
+              .addEventListener("click", () => visDetaljer(ret));
+
+            dest.appendChild(klon);
+          }
+        });
+      }
+
+      function visDetaljer(ret) {
+        console.log(ret);
+        popup.style.display = "block";
+        popup.querySelector("img").src = "medium/" + ret.billednavn + md;
+        popup.querySelector("h2").textContent = ret.navn;
+        popup.querySelector(".langbeskrivelse").textContent =
+          ret.langbeskrivelse;
+        popup
+          .querySelector(".seMere")
+          .addEventListener("click", () => visFlereDetaljer(ret));
+      }
+      document
+        .querySelector("#luk")
+        .addEventListener("click", () => (popup.style.display = "none"));
+
+      function visFlereDetaljer(retten) {
+        location.href = `flereDetaljer.html?id=${retten._id}`;
+      }
+    </script>
+  </body>
+</html>
