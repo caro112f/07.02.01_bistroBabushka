@@ -12,8 +12,11 @@
       }
       img {
         max-width: 70vw;
+        border-radius: 20px;
       }
       article {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         border-radius: 20px;
         padding: 10px;
         background-color: gainsboro;
@@ -26,20 +29,28 @@
         border-radius: 20px;
         cursor: pointer;
       }
+      button:hover {
+        background-color: rgb(194, 129, 132);
+      }
+      .beskrivelse {
+        padding: 1em;
+      }
     </style>
   </head>
   <body>
     <nav>
-      <button>Back</button>
+      <button>Tilbage</button>
     </nav>
     <article class="ret">
-      <img src="" alt="" class="billede" />
-      <h2 class="navn"></h2>
-      <h3 class="kortbeskrivelse"></h3>
-      <p class="langbeskrivelse"></p>
-      <p class="oprindelsesregion"></p>
-      <p class="kategori"></p>
-      <p class="pris"></p>
+      <div><img src="" alt="" class="billede" /></div>
+      <section class="beskrivelse">
+        <h2 class="navn"></h2>
+        <h3 class="kortbeskrivelse"></h3>
+        <p class="langbeskrivelse"></p>
+        <p class="oprindelsesregion"></p>
+        <p class="kategori"></p>
+        <p class="pris"></p>
+      </section>
     </article>
 
     <script>
