@@ -16,12 +16,27 @@
       }
       article {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
         border-radius: 20px;
         padding: 10px;
         background-color: gainsboro;
-        margin: 20px;
       }
+      @media (min-width: 800px) {
+        article {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+          border-radius: 20px;
+          padding: 10px;
+          background-color: gainsboro;
+          margin: 20px;
+        }
+        .beskrivelse {
+          padding: 1em;
+        }
+      }
+
       button {
         margin: 20px;
         padding: 1em;
@@ -35,9 +50,6 @@
       }
       button:hover {
         background-color: rgb(194, 129, 132);
-      }
-      .beskrivelse {
-        padding: 1em;
       }
     </style>
   </head>

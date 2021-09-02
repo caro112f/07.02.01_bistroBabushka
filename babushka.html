@@ -64,6 +64,7 @@
         overflow: scroll;
         padding: 10px;
       }
+
       @media (min-width: 600px) {
         section {
           display: grid;
@@ -79,17 +80,18 @@
           gap: 10px;
           max-width: 1200px;
         }
+        #article_popup {
+          display: grid;
+          grid-template-columns: repeat(auto, minmax(300px, 1000px));
+          max-width: 80vw;
+          height: auto;
+          margin: 4rem;
+          padding: 12px;
+          border-radius: 25px;
+          background-color: gainsboro;
+        }
       }
-      #article_popup {
-        display: grid;
-        grid-template-columns: repeat(auto, minmax(300px, 1000px));
-        max-width: 80vw;
-        height: auto;
-        margin: 4rem;
-        padding: 12px;
-        border-radius: 25px;
-        background-color: gainsboro;
-      }
+
       img {
         max-width: 60%;
         border-radius: 20px;
@@ -151,7 +153,7 @@
       <section id="popup" class="hide">
         <div id="luk"><button>Luk</button></div>
         <article id="article_popup">
-          <img src="" alt="" />
+          <div><img src="" alt="" /></div>
           <section class="beskrivelse">
             <h2>Navn: <span class="navn"></span></h2>
             <p>Beskrivelse: <span class="langbeskrivelse"></span></p>
